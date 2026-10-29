@@ -11,11 +11,11 @@ class Courses(models.Model):
         return f"{self.title}"
 
 class Lessons(models.Model):
-    course = models.ForeignKey(Courses, on_delete=models.CASCADE, verbose_name='Курс')
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name='lessons', verbose_name='Курс')
     title = models.CharField(max_length=150, verbose_name='Урок')
     image = models.ImageField(upload_to='lessons/', blank=True, null=True, verbose_name='Превью')
     description = models.TextField(verbose_name='Описание')
-    video = models.URLField()
+    video = models.URLField(blank=True, null=True,)
 
     def __str__(self):
         return f"{self.title}"
