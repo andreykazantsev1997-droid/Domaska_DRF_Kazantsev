@@ -5,12 +5,19 @@ from materials.models import Courses, Lessons
 from materials.serializers import CoursesSerializer, LessonsSerializer
 from users.permissions import IsModerator, IsOwnerOrStaff
 # Create your views here.
+
 class CoursesViewSet(viewsets.ModelViewSet):
     serializer_class = CoursesSerializer
     queryset = Courses.objects.all()
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 class LessonsCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonsSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class LessonsListAPIView(generics.ListAPIView):
     serializer_class = LessonsSerializer

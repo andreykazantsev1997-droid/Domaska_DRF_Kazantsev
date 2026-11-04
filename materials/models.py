@@ -18,6 +18,7 @@ class Lessons(models.Model):
     image = models.ImageField(upload_to='lessons/', blank=True, null=True, verbose_name='Превью')
     description = models.TextField(verbose_name='Описание')
     video = models.URLField(blank=True, null=True,)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title}"
