@@ -6,42 +6,34 @@ from materials.serializers import CoursesSerializer, LessonsSerializer
 from users.permissions import IsModerator, IsOwnerOrStaff
 # Create your views here.
 
-class CoursesViewSet(viewsets.ModelViewSet):
-    serializer_class = CoursesSerializer
-    queryset = Courses.objects.all()
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-class LessonsCreateAPIView(generics.CreateAPIView):
-    serializer_class = LessonsSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-class LessonsListAPIView(generics.ListAPIView):
-    serializer_class = LessonsSerializer
-    queryset = Lessons.objects.all()
-
-class LessonsRetrieveAPIView(generics.RetrieveAPIView):
-    serializer_class = LessonsSerializer
-    queryset = Lessons.objects.all()
-
-class LessonsUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = LessonsSerializer
-    queryset = Lessons.objects.all()
-
-class LessonsDestroyAPIView(generics.DestroyAPIView):
-    queryset = Lessons.objects.all()
-
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CoursesSerializer
     queryset = Courses.objects.all()
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
     def get_permissions(self):
-        if self.action in ['create', 'destroy']:
-            self.permission_classes = [IsAuthenticated]
+        if self.action == 'create':
+            self.permission_classes = [IsAuthenticated, ~IsModerator]
         elif self.action in ['update', 'partial_update', 'retrieve', 'list']:
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrStaff]
+        elif self.action == 'destroy':
+            self.permission_classes = [IsAuthenticated, IsOwnerOrStaff]
+        return super().get_permissions()
 
-        return [permission() for permission in self.permission_classes]
+class LessonViewSet(viewsets.ModelViewSet):
+    serializer_class = LessonsSerializer
+    queryset = Lessons.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [IsAuthenticated, ~IsModerator]
+        elif self.action in ['update', 'partial_update', 'retrieve', 'list']:
+            self.permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrStaff]
+        elif self.action == 'destroy':
+            self.permission_classes = [IsAuthenticated, IsOwnerOrStaff]
+        return super().get_permissions()
