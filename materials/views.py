@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from materials.models import Courses, Lessons
+from materials.paginators import CustomPaginator
 from materials.serializers import CoursesSerializer, LessonsSerializer
 from users.permissions import IsModerator, IsOwnerOrStaff
 # Create your views here.
@@ -12,6 +13,11 @@ class LessonsCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+class LessonViewSet(viewsets.ModelViewSet):
+    queryset = Lessons.objects.all()
+    serializer_class = LessonsSerializer
+    pagination_class = CustomPaginator
 
 class LessonsListAPIView(generics.ListAPIView):
     serializer_class = LessonsSerializer
@@ -35,6 +41,7 @@ class LessonsDestroyAPIView(generics.DestroyAPIView):
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CoursesSerializer
     queryset = Courses.objects.all()
+    pagination_class = CustomPaginator
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
