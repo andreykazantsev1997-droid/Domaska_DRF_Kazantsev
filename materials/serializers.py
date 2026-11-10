@@ -8,6 +8,7 @@ class LessonsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lessons
         fields = '__all__'
+        validators = [RecordValidator(field='video')]
 
 class CoursesSerializer(serializers.ModelSerializer):
     lessons_count = serializers.SerializerMethodField()

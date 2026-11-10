@@ -17,7 +17,6 @@ class LessonsCreateAPIView(generics.CreateAPIView):
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lessons.objects.all()
     serializer_class = LessonsSerializer
-    pagination_class = CustomPaginator
 
 class LessonsListAPIView(generics.ListAPIView):
     serializer_class = LessonsSerializer
@@ -36,7 +35,7 @@ class LessonsUpdateAPIView(generics.UpdateAPIView):
 
 class LessonsDestroyAPIView(generics.DestroyAPIView):
     queryset = Lessons.objects.all()
-    permission_classes = [IsAuthenticated, IsOwnerOrStaff]  # Удалять может только владелец
+    permission_classes = [IsAuthenticated, IsOwnerOrStaff]
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CoursesSerializer

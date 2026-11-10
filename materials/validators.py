@@ -11,4 +11,4 @@ class RecordValidator:
             return
 
         if ('http://' in tmp_val or 'https://' in tmp_val) and 'youtube.com' not in tmp_val:
-            raise ValidationError('Record is not ok')
+            raise ValidationError('Разрешены только ссылки на видеохостинг youtube.com')
