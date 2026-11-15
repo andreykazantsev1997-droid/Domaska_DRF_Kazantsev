@@ -31,7 +31,9 @@ class Payments(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Оплаченный курс')
     lesson = models.ForeignKey(Lessons, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Оплаченный урок')
     payment = models.IntegerField(verbose_name='Сумма оплаты')
-    method =models.CharField(choices=PAYMENT_METHODS, max_length=20, verbose_name='Метод оплаты')
+    method = models.CharField(choices=PAYMENT_METHODS, max_length=20, verbose_name='Метод оплаты')
+    session_id = models.CharField(max_length=500, blank=True, null=True, verbose_name='ID сессии')
+    link = models.URLField(max_length=500, blank=True, null=True, verbose_name='Ссылка на оплату')
 
 class Subscription(models.Model):
     user = models.ForeignKey(
