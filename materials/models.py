@@ -12,6 +12,11 @@ class Courses(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+    class Meta:
+        ordering = ["id"]
+        verbose_name = "курс"
+        verbose_name_plural = "курсы"
+
 class Lessons(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name='lessons', verbose_name='Курс')
     title = models.CharField(max_length=150, verbose_name='Урок')
@@ -22,3 +27,8 @@ class Lessons(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
+    class Meta:
+        ordering = ["id"]
+        verbose_name = "урок"
+        verbose_name_plural = "уроки"
