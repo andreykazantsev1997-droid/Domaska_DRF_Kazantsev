@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'materials',
     'django_filters',
     'drf_yasg',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +153,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'materials.paginators.CustomPaginator',
     'PAGE_SIZE': 5,
 }
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+CELERY_TIMEZONE = "Europe/Minsk"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
