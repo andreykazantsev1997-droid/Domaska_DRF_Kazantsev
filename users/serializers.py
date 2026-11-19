@@ -2,12 +2,27 @@ from rest_framework import serializers
 
 from materials.models import Lessons, Courses
 from users.models import Payments, CustomUser, Subscription
+from users.services import create_product, create_price, create_session
 
 
 class PaymentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payments
         fields = '__all__'
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+
+        payment = super().create(validated_data)
+        product_id = create_product(payment.course)
+        price_id = create_price(product_id, payment.payment)
+        session_id, payment_link = create_session(price_id)
+
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()
+        return payment
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
