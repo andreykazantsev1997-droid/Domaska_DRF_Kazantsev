@@ -5,6 +5,7 @@ from materials.models import Courses, Lessons
 from materials.paginators import CustomPaginator
 from materials.serializers import CoursesSerializer, LessonsSerializer
 from users.permissions import IsModerator, IsOwnerOrStaff
+from .tasks import mailing_list
 # Create your views here.
 
 class LessonsCreateAPIView(generics.CreateAPIView):
@@ -55,3 +56,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         else:
             self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+        mailing_list.delay(course.id)
